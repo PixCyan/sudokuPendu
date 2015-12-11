@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Sudoku</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_sudoku">Sudoku</string>
+    <string name="title_activity_pendu">Pendu</string>
+    <string name="title_activity_gagne__pendu_">Gagne_Pendu_Activity</string>
+    <string name="title_activity_perdu__pendu_">Perdu_Pendu_Activity</string>
+</resources>
