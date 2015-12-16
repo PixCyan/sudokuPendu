@@ -132,35 +132,26 @@ public class DAOMot extends DAOBase  {
         }
 
         public Mot retrieveByMot(String mot) {
-
             //Récupère dans un Cursor les valeur correspondant à une mot contenu dans la BD à l'aide de son id
             Cursor cursor = getDB().rawQuery("SELECT * FROM " + TABLE_MOT + " WHERE " + MOT + "=?", new String[]{mot});
-
             return cursorToFirstMot(cursor);
         }
 
         public Mot getMotRandom(String niveau) {
-
             //Récupère dans un Cursor les valeur correspondant à un mot au hasard selon le niveau demandé
-            System.out.println("SELECT * FROM " + TABLE_MOT  +" ORDER BY RANDOM() LIMIT 1"+ " WHERE "+ NIVEAU +" = \""+ niveau +"\"");
-            Cursor cursor = getDB().rawQuery("SELECT * FROM " + TABLE_MOT  +" ORDER BY RANDOM() LIMIT 1"+ " WHERE "+ NIVEAU +" = \""+ niveau +"\"", new String[]{niveau});
-            System.out.println("BDD");
+            Cursor cursor = getDB().rawQuery("SELECT * FROM "+ TABLE_MOT + " WHERE "+ NIVEAU +" = "+ niveau +" ORDER BY RANDOM() LIMIT 1", new String[]{});
             return cursorToFirstMot(cursor);
         }
 
         //Cette méthode permet de convertir un cursor en une liste de mots
         private List<Mot> cursorToListMot(Cursor cursor) {
-
             // Récupére l'index des champs
             int indexMot = cursor.getColumnIndex(MOT);
             int indexIndice = cursor.getColumnIndex(INDICE);
             int indexNiveau = cursor.getColumnIndex(NIVEAU);
-
             // Declaration et initialisation d'une liste de mots
             ArrayList<Mot> liste = new ArrayList<>();
-
             while (cursor.moveToNext()) {
-
                 // Création d'un mot
                 Mot mot = new Mot();
                 mot.setLibelle(cursor.getString(indexMot));
@@ -170,7 +161,6 @@ public class DAOMot extends DAOBase  {
                 // Ajout dans la liste
                 liste.add(mot);
             }
-
             // Fermeture du cursor
             cursor.close();
             //
@@ -197,12 +187,9 @@ public class DAOMot extends DAOBase  {
                 mot.setNiveau(cursor.getInt(indexNiveau));
 
             }
-
             // Fermeture du cursor
             cursor.close();
-
             //
             return mot;
         }
     }
-

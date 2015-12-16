@@ -12,39 +12,39 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:id="@+id/layout">
+
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Veuillez entrer une lettre"
-        android:layout_marginTop="40dp"
+        android:text="Entrez une lettre"
         android:id="@+id/textView"
-        android:layout_below="@+id/layout"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_above="@+id/editText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView" />
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/imgPendu"
+        android:layout_alignEnd="@+id/imgPendu" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Lettre déjà entrées : "
-        android:layout_marginRight="45dp"
-        android:layout_marginEnd="45dp"
-        android:id="@+id/textView2"
-        android:layout_above="@+id/editText"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView" />
+        android:id="@+id/lEntrees"
+        android:layout_marginLeft="49dp"
+        android:layout_marginStart="49dp"
+        android:layout_alignTop="@+id/imgPendu"
+        android:layout_toRightOf="@+id/imgPendu"
+        android:layout_toEndOf="@+id/imgPendu" />
 
     <Button
         android:layout_width="wrap_content"
@@ -52,18 +52,28 @@
         android:text="Valider"
         android:id="@+id/valider"
         android:onClick="valider"
-        android:layout_below="@+id/editText"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/imgPendu"
         android:background="@drawable/pendu1"
-        android:layout_below="@+id/valider"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="40dp" />
 
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/indice"
+        android:background="@drawable/icone_ampoule"
+        android:layout_alignBottom="@+id/editText"
+        android:layout_alignRight="@+id/lEntrees"
+        android:layout_alignEnd="@+id/lEntrees"
+        android:clickable="true"
+        android:onClick="afficherIndice"/>
 
 </RelativeLayout>

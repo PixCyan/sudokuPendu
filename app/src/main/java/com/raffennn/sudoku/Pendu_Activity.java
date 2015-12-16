@@ -1,5 +1,8 @@
 package com.raffennn.sudoku;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +12,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.raffennn.sudoku.data.DAOMot;
 import com.raffennn.sudoku.data.Mot;
 
@@ -20,21 +23,25 @@ import java.util.HashSet;
 public class Pendu_Activity extends AppCompatActivity {
     public final static int PERDU_REQUEST = 0;
     public final static int GAGNE_REQUEST = 1;
-   // private Pendu pendu = new Pendu();
+    public static final String LVL = "niveau";
 
-    private String motAtrouver;
+    private Mot motAtrouver;
     private HashSet<Character> lettresEntrees;
     private char[] motActuel;
     private int pointPerdu;
+    private String niveau;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pendu);
 
+        //choixNiveau dialog
+            niveau = getIntent().getStringExtra(MainActivity.LVL);
+        //
+
         this.pointPerdu = 0;
         this.nouveauMot();
-        System.out.println("Je suis là ?");
         int tailleMot = this.tailleMot();
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
         for(int i = 0; i < tailleMot; i++) {
@@ -51,7 +58,7 @@ public class Pendu_Activity extends AppCompatActivity {
         EditText editT = (EditText) findViewById(R.id.editText);
         editT.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
         editT.setFilters(new InputFilter[]{
-               new InputFilter.AllCaps(),
+                new InputFilter.AllCaps(),
                 new InputFilter.LengthFilter(1)
         });
     }
@@ -70,45 +77,39 @@ public class Pendu_Activity extends AppCompatActivity {
                 R.drawable.pendu6, R.drawable.pendu7,
                 R.drawable.pendu8, R.drawable.pendu9,
                 R.drawable.pendu10};
-        System.out.println("pendu"+this.pointPerdu);
         imgPendu.setBackgroundResource(id[this.pointPerdu]);
         if(this.perduPendu()) {
-            Toast.makeText(this, "PERDU", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "PERDU ! Le mot était : "+ this.motAtrouver.getLibelle(), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, Perdu_Pendu_Activity.class);
             startActivityForResult(intent, PERDU_REQUEST);
-            //TODO passer le mot à trouver en paramètre
 
         } else if(this.gagnerPendu()) {
             Intent intent = new Intent(this, Gagne_Pendu_Activity.class);
             startActivityForResult(intent, GAGNE_REQUEST);
-            Toast.makeText(this, "GAGNE", Toast.LENGTH_LONG).show();
-            //TODO passer le mot à trouver en paramètre
+            Toast.makeText(this, "GAGNE : "+ this.motAtrouver.getLibelle(), Toast.LENGTH_LONG).show();
         }
-        //TODO renseigner les lettres entrées
-
-        /*Resources res = getResources();
-        Drawable drawable = res.getDrawable(R.drawable.newImage);
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.GameLayout);
-        linearLayout.setBackgroundDrawable(drawable);*/
-
+        TextView tv = (TextView) findViewById(R.id.lEntrees);
+        String chaine = "";
+        for(Character c: lettresEntrees) {
+            chaine += c + " - ";
+        }
+        tv.setText("Lettre déjà entrées : " + chaine);
     }
 
-    //TODO ajout de l'indice
+    public void afficherIndice(View view) {
+        Toast.makeText(this, "Indice : "+ this.motAtrouver.getIndice(), Toast.LENGTH_LONG).show();
+    }
 
     //ajout des méthodes de la class Pendu
     public void nouveauMot() {
-        System.out.println("TEST NOUVEAU MOT");
         this.lettresEntrees = new HashSet<>();
         DAOMot MotDAO = new DAOMot(this);
         MotDAO.open();
-        this.motAtrouver =  MotDAO.getMotRandom(Integer.toString(1)).getLibelle();
-        System.out.println("Test");
-        //
+        this.motAtrouver =  MotDAO.getMotRandom(this.niveau);
         this.motActuel = new char[this.tailleMot()];
         for(int i = 0; i < this.tailleMot(); i++) {
             this.motActuel[i] = '_';
         }
-        //
         MotDAO.close();
     }
 
@@ -124,7 +125,7 @@ public class Pendu_Activity extends AppCompatActivity {
 
     public boolean gagnerPendu() {
         boolean gagner = false;
-        if(new String(this.motActuel).equals(this.motAtrouver)) {
+        if(new String(this.motActuel).equals(this.motAtrouver.getLibelle())) {
             gagner = true;
         } else {
             gagner = false;
@@ -133,11 +134,11 @@ public class Pendu_Activity extends AppCompatActivity {
     }
 
     public int tailleMot() {
-        return this.motAtrouver.length();
+        return this.motAtrouver.getLibelle().length();
     }
 
     public void comparerLettre(char lettreEntree) {
-        char[] tabMot = this.motAtrouver.toCharArray();
+        char[] tabMot = this.motAtrouver.getLibelle().toCharArray();
         boolean lettrePrésente = false;
         for(int i = 0; i < tabMot.length; i++) {
             if(tabMot[i] == lettreEntree) {
