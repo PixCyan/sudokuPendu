@@ -19,11 +19,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Sudoku"
-            android:label="@string/title_activity_sudoku"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
             android:name=".Pendu_Activity"
             android:label="@string/title_activity_pendu"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -36,6 +31,11 @@
         <activity
             android:name=".Perdu_Pendu_Activity"
             android:label="@string/title_activity_perdu__pendu_"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".SudokuActivity"
+            android:label="@string/title_activity_sudoku"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
