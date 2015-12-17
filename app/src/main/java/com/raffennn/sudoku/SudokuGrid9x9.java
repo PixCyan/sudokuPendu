@@ -17,9 +17,7 @@ import java.util.Random;
  */
 public class SudokuGrid9x9 implements ISudokuGrid {
 
-
     protected static final int MAX_PERMUTATION = 10;
-
     protected static final int [][] BASE_GRID = {
             // A B C D E F G H I
             {3,2,9,6,5,7,8,4,1}, // A
@@ -33,9 +31,7 @@ public class SudokuGrid9x9 implements ISudokuGrid {
             {9,6,1,5,8,4,7,3,2}};// I
 
     protected ISudokuCell [][] grid;
-
     protected ISudokuCell [][] solution;
-
     protected static Random r = new Random(System.currentTimeMillis());
 
     /**

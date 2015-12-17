@@ -8,22 +8,36 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 public class SudokuActivity extends AppCompatActivity {
+    public static final String LVL = "niveau";
+    private String niveau;
+    private SudokuDifficulty difficulte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //choixNiveau dialog
+        niveau = getIntent().getStringExtra(MainActivity.LVL);
+        //
+        /*switch (niveau) {
+            case "1":
+                this.difficulte = SudokuDifficulty.EASY;
+                break;
+            case "2":
+                this.difficulte = SudokuDifficulty.MEDIUM;
+                break;
+            case "3":
+                this.difficulte = SudokuDifficulty.HARD;
+                break;
+            default:
+                break;
+        }
+
+        SudokuGrid9x9 sudoku =  new SudokuGrid9x9(difficulte);*/
+
     }
 
 }

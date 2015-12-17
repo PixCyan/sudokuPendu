@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void choixLvlSudoku(String valeur) {
-        Intent intent = new Intent(this, Sudoku.class);
+        Toast.makeText(this, valeur, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, SudokuActivity.class);
         startActivityForResult(intent, SUDOKU_REQUEST);
         int choix = Integer.parseInt(valeur)+1;
         intent.putExtra(LVL, Integer.toString(choix));
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void choixLvlPendu(String valeur) {
-        Intent intent = new Intent(this, Pendu_Activity.class);
+        Intent intent = new Intent(this, PenduActivity.class);
         int choix = Integer.parseInt(valeur)+1;
         intent.putExtra(LVL, Integer.toString(choix));
         //intent.putExtra(COMPTE, login);

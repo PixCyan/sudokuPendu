@@ -1,8 +1,5 @@
 package com.raffennn.sudoku;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.raffennn.sudoku.data.DAOMot;
@@ -20,7 +16,7 @@ import com.raffennn.sudoku.data.Mot;
 
 import java.util.HashSet;
 
-public class Pendu_Activity extends AppCompatActivity {
+public class PenduActivity extends AppCompatActivity {
     public final static int PERDU_REQUEST = 0;
     public final static int GAGNE_REQUEST = 1;
     public static final String LVL = "niveau";
@@ -80,11 +76,11 @@ public class Pendu_Activity extends AppCompatActivity {
         imgPendu.setBackgroundResource(id[this.pointPerdu]);
         if(this.perduPendu()) {
             Toast.makeText(this, "PERDU ! Le mot était : "+ this.motAtrouver.getLibelle(), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, Perdu_Pendu_Activity.class);
+            Intent intent = new Intent(this, PerduPenduActivity.class);
             startActivityForResult(intent, PERDU_REQUEST);
 
         } else if(this.gagnerPendu()) {
-            Intent intent = new Intent(this, Gagne_Pendu_Activity.class);
+            Intent intent = new Intent(this, GagnePenduActivity.class);
             startActivityForResult(intent, GAGNE_REQUEST);
             Toast.makeText(this, "GAGNE : "+ this.motAtrouver.getLibelle(), Toast.LENGTH_LONG).show();
         }
