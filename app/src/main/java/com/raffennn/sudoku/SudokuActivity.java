@@ -14,6 +14,8 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 public class SudokuActivity extends AppCompatActivity {
     public static final String LVL = "niveau";
 
@@ -35,14 +37,14 @@ public class SudokuActivity extends AppCompatActivity {
     }
 
     private String niveau;
+    SudokuGrid9x9 sudokuGame;
     private SudokuDifficulty difficulte;
+    private int[] sudokuTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
         //choixNiveau dialog
         niveau = getIntent().getStringExtra(MainActivity.LVL);
@@ -60,32 +62,44 @@ public class SudokuActivity extends AppCompatActivity {
             default:
                 break;
         }
-        //Toast.makeText(this, this.difficulte.getLabel(), Toast.LENGTH_LONG).show();
-
         //Récupération du GridLayout
         GridView gridview = (GridView) findViewById(R.id.grid);
-        SudokuGrid9x9 sudoku = new SudokuGrid9x9(difficulte);
+        this.sudokuGame = new SudokuGrid9x9(difficulte);
 
         int[] tab = new int[81];
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
-                tab[gridToViewCoord(i, j)] = Integer.parseInt(sudoku.getValueAt(i, j));
+                tab[gridToViewCoord(i, j)] = Integer.parseInt(this.sudokuGame.getValueAt(i, j));
             }
         }
-        gridview.setAdapter(new GrilleAdapter(tab));
+        this.sudokuTab = tab;
+        gridview.setAdapter(new GrilleAdapter());
     }
 
     public void valider(View view) {
-        Toast.makeText(SudokuActivity.this, "Finir le sudoku", Toast.LENGTH_SHORT).show();
-        
+        List<SudokuError> errors = this.sudokuGame.checkGrid();
+        if(errors.isEmpty()) {
+            Toast.makeText(SudokuActivity.this, "Sudoku VALIDE", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(SudokuActivity.this, "Sudoku FAUX", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean emptyCellInTab() {
+        boolean res = false;
+        for(int i = 0; i < sudokuTab.length; i++) {
+            if(sudokuTab[i] == 0) {
+                res = true;
+                break;
+            }
+        }
+        return res;
     }
 
     private class SousGrilleAdapter extends BaseAdapter {
-        private final int[] sudoku;
         private final int positionDepart;
 
-        public SousGrilleAdapter(int[] sudoku, int positionDepart) {
-            this.sudoku = sudoku;
+        public SousGrilleAdapter(int positionDepart) {
             this.positionDepart = positionDepart;
         }
 
@@ -96,7 +110,7 @@ public class SudokuActivity extends AppCompatActivity {
 
         @Override
         public Object getItem(int position) {
-            return this.sudoku[positionDepart + position];
+            return sudokuTab[positionDepart + position];
         }
 
         @Override
@@ -118,12 +132,12 @@ public class SudokuActivity extends AppCompatActivity {
             };
             if(getItem(position).toString().equals("0")) {
                 res.setText("");
-                res.setBackgroundColor(0xFFC0C0C0);
+                res.setBackgroundColor(Color.WHITE);
                 res.setClickable(true);
                 res.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(res.getContext(), getItem(position).toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(res.getContext(), getItem(position).toString(), Toast.LENGTH_SHORT).show();
                         final Dialog dialogue = new Dialog(SudokuActivity.this);
                         dialogue.setTitle("Choisissez un nombre : ");
                         dialogue.setContentView(R.layout.number_picker);
@@ -138,13 +152,21 @@ public class SudokuActivity extends AppCompatActivity {
                                 //Toast.makeText(SudokuActivity.this, Integer.toString(np.getValue()), Toast.LENGTH_SHORT).show();
                                 res.setText(Integer.toString(np.getValue()));
                                 dialogue.dismiss();
+                                int[] vtg = viewToGridCoord(position);
+                                System.out.println("vtg == " + vtg[0] + "  " + vtg[1]);
+                                System.out.println("Solution = " +sudokuGame.getSolutionAt(vtg[0], vtg[1]) );
+                                if(!(sudokuGame.getSolutionAt(vtg[0], vtg[1]).equals(res.getText().toString()))) {
+                                    Toast.makeText(SudokuActivity.this, "FAUX", Toast.LENGTH_SHORT).show();
+                                    sudokuGame.setValueAt(vtg[0], vtg[1], Integer.parseInt(res.getText().toString()));
+                                }
+
                             }
                         });
                         dialogue.show();
                     }
                 });
             } else {
-                res.setBackgroundColor(Color.WHITE);
+                res.setBackgroundColor(0xFFC0C0C0);
                 res.setText(this.getItem(position).toString());
             }
             res.setGravity(Gravity.CENTER);
@@ -158,11 +180,6 @@ public class SudokuActivity extends AppCompatActivity {
 
     //Adapter pour GridView principale
     private class GrilleAdapter extends BaseAdapter {
-        private final int[] sudoku;
-
-        public GrilleAdapter(int[] sudoku) {
-            this.sudoku = sudoku;
-        }
 
         @Override
         public int getCount() {
@@ -193,7 +210,7 @@ public class SudokuActivity extends AppCompatActivity {
 
             float densite = getResources().getDisplayMetrics().density;
             int dpToPixel = (int) (1 * densite);
-            sousGrille.setAdapter(new SousGrilleAdapter(this.sudoku, position * 9));
+            sousGrille.setAdapter(new SousGrilleAdapter(position * 9));
             sousGrille.setNumColumns(3);
             sousGrille.setHorizontalSpacing(dpToPixel);
             sousGrille.setVerticalSpacing(dpToPixel);
