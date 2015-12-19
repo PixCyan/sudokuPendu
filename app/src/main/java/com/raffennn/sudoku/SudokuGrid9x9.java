@@ -42,7 +42,7 @@ public class SudokuGrid9x9 implements ISudokuGrid {
      */
     public SudokuGrid9x9(SudokuDifficulty difficulty) {
         this.generateGrid();
-        this.makeHoles(difficulty.computeHolesToMake());
+        //this.makeHoles(difficulty.computeHolesToMake());
     }
 
     /* **** Protected Methods **** */
