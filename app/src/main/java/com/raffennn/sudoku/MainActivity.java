@@ -1,6 +1,9 @@
 package com.raffennn.sudoku;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,14 +31,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
     }
 
     @Override
@@ -101,4 +99,29 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, PENDU_REQUEST);
     }
 
+    /*
+    //Test numberPicker dans un dialog
+        public void alertNumberPicker(View view) {
+       final Dialog dialogue = new Dialog(MainActivity.this);
+        dialogue.setTitle("Choisissez un nombre : ");
+        dialogue.setContentView(R.layout.number_picker);
+        Button bouton = (Button) dialogue.findViewById(R.id.bouton);
+
+        final NumberPicker np = (NumberPicker) dialogue.findViewById(R.id.np);
+        np.setMaxValue(9);
+        np.setMinValue(1);
+        //np.setWrapSelectorWheel(false);
+        //np.setOnValueChangedListener(this);
+        bouton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                //tv.setText(String.valueOf(np.getValue()));
+                Toast.makeText(MainActivity.this, Integer.toString(np.getValue()), Toast.LENGTH_SHORT).show();
+                dialogue.dismiss();
+            }
+        });
+        dialogue.show();
+    }
+     */
 }

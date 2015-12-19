@@ -1,5 +1,6 @@
 package com.raffennn.sudoku;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +36,6 @@ public class SudokuActivity extends AppCompatActivity {
 
     private String niveau;
     private SudokuDifficulty difficulte;
-    private GridView gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,43 +66,18 @@ public class SudokuActivity extends AppCompatActivity {
         GridView gridview = (GridView) findViewById(R.id.grid);
         SudokuGrid9x9 sudoku = new SudokuGrid9x9(difficulte);
 
-
-        //Récupération cellule par cellule
-        //Chaque petite grille = un tableau
-        //Ranger toute les cellules d'une ligne dans un tableau "tab"
-        //Placer ce tab dans la grille "i" du GridLayout
-
         int[] tab = new int[81];
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 tab[gridToViewCoord(i, j)] = Integer.parseInt(sudoku.getValueAt(i, j));
             }
         }
-
-        int[][] BASE_GRID = {
-                // A B C D E F G H I
-                {3, 2, 9, 6, 5, 7, 8, 4, 1}, // A
-                {7, 4, 5, 8, 3, 1, 2, 9, 6}, // B
-                {6, 1, 8, 2, 4, 9, 3, 7, 5}, // C
-                {1, 9, 3, 4, 6, 8, 5, 2, 7}, // D
-                {2, 7, 6, 1, 9, 5, 4, 8, 3}, // E
-                {8, 5, 4, 3, 7, 2, 6, 1, 9}, // F
-                {4, 3, 2, 7, 1, 6, 9, 5, 8}, // G
-                {5, 8, 7, 9, 2, 3, 1, 6, 4}, // H
-                {9, 6, 1, 5, 8, 4, 7, 3, 2}};// I
-
         gridview.setAdapter(new GrilleAdapter(tab));
+    }
 
-            /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, tab);
-            gridview.setAdapter(adapter);
-
-            //ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(10, 10);
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            //lp.setMargins(-40, -40, -40,-40);
-
-            gridview.setLayoutParams(lp);*/
-
+    public void valider(View view) {
+        Toast.makeText(SudokuActivity.this, "Finir le sudoku", Toast.LENGTH_SHORT).show();
+        
     }
 
     private class SousGrilleAdapter extends BaseAdapter {
@@ -139,17 +116,37 @@ public class SudokuActivity extends AppCompatActivity {
                 }
 
             };
+            if(getItem(position).toString().equals("0")) {
+                res.setText("");
+                res.setBackgroundColor(0xFFC0C0C0);
+                res.setClickable(true);
+                res.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(res.getContext(), getItem(position).toString(), Toast.LENGTH_SHORT).show();
+                        final Dialog dialogue = new Dialog(SudokuActivity.this);
+                        dialogue.setTitle("Choisissez un nombre : ");
+                        dialogue.setContentView(R.layout.number_picker);
+                        Button bouton = (Button) dialogue.findViewById(R.id.bouton);
 
-            res.setClickable(true);
-            res.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(res.getContext(), getItem(position).toString(), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            res.setBackgroundColor(Color.WHITE);
-            res.setText(this.getItem(position).toString());
+                        final NumberPicker np = (NumberPicker) dialogue.findViewById(R.id.np);
+                        np.setMaxValue(9);
+                        np.setMinValue(1);
+                        bouton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //Toast.makeText(SudokuActivity.this, Integer.toString(np.getValue()), Toast.LENGTH_SHORT).show();
+                                res.setText(Integer.toString(np.getValue()));
+                                dialogue.dismiss();
+                            }
+                        });
+                        dialogue.show();
+                    }
+                });
+            } else {
+                res.setBackgroundColor(Color.WHITE);
+                res.setText(this.getItem(position).toString());
+            }
             res.setGravity(Gravity.CENTER);
             //ignore le padding du texte :
             res.setIncludeFontPadding(false);
@@ -157,7 +154,6 @@ public class SudokuActivity extends AppCompatActivity {
             res.setPadding(0, 0, 0, 0);
             return res;
         }
-
     }
 
     //Adapter pour GridView principale
