@@ -38,8 +38,29 @@ public enum SudokuDifficulty {
         return this.nbHoles;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public int getNbHoles() {
+        return nbHoles;
+    }
+
+    public void setNbHoles(int nbHoles) {
+        this.nbHoles = nbHoles;
+    }
+
     public String toString() {
         return this.label;
     }
+
 
 }
